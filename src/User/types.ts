@@ -1,10 +1,18 @@
 export interface IUser {
-  id: string; // uuid v4
+  id: string;
   login: string;
   password: string;
-  version: number; // integer number, increments on update
-  createdAt: number; // timestamp of creation
-  updatedAt: number; // timestamp of last update
+  version: number;
+  createdAt: number;
+  updatedAt: number;
 }
 
-export type CreateUserDto = Omit<IUser, 'version' | 'createdAt' | 'updatedAt'>;
+export interface CreateUserDto {
+  login: string;
+  password: string;
+}
+
+export interface UpdatePasswordDto {
+  oldPassword: string;
+  newPassword: string;
+}

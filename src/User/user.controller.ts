@@ -10,8 +10,8 @@ export class UserController {
     return this.userService.getAllUsers();
   }
   @Get(':id')
-  getUserById(@Param() params: { id: string }): string {
-    return this.userService.getUserById(params.id);
+  getUserById(@Param('id') id: string): string {
+    return this.userService.getUserById(id);
   }
   @Post()
   @HttpCode(201)

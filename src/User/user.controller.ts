@@ -4,6 +4,7 @@ import {
   Get,
   Header,
   HttpCode,
+  HttpException,
   HttpStatus,
   Param,
   Post,
@@ -15,13 +16,20 @@ import { CreateUserDto, FindID } from './Dto/types';
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Get()
-  getAllUsers(): string {
+  @Header('content-type', 'application/json')
+  getAllUsers() {
     return this.userService.getAllUsers();
   }
+
   @Get(':id')
-  getUserById(@Param() params: FindID): string {
-    return this.userService.getUserById(params);
+  @Header('content-type', 'application/json')
+  getUserById(@Param() params: FindID) {
+    const searchResult = this.userService.getUserById(params);
+    if (!searchResult)
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    return searchResult;
   }
+
   @Post()
   @Header('content-type', 'application/json')
   @HttpCode(HttpStatus.CREATED)

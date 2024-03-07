@@ -5,7 +5,12 @@ export class UserService {
   getAllUsers(): string {
     return 'getAllUsers';
   }
-  getUserById(): string {
+  getUserById(id: string): string {
+    console.log(id);
     return 'getUserById';
+  }
+  create(req: Request): string {
+    console.log(req.body);
+    return 'createUser';
   }
 }

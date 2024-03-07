@@ -2,10 +2,11 @@ import {
   Body,
   Controller,
   Get,
+  Header,
   HttpCode,
+  HttpStatus,
   Param,
   Post,
-  // Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, FindID } from './Dto/types';
@@ -13,7 +14,6 @@ import { CreateUserDto, FindID } from './Dto/types';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
   @Get()
   getAllUsers(): string {
     return this.userService.getAllUsers();
@@ -23,10 +23,9 @@ export class UserController {
     return this.userService.getUserById(params);
   }
   @Post()
-  @HttpCode(201)
+  @Header('content-type', 'application/json')
+  @HttpCode(HttpStatus.CREATED)
   create(@Body() createUserDto: CreateUserDto): string {
-    // console.log(createUserDto);
-    // return 'Create user';
     return this.userService.create(createUserDto);
   }
 }

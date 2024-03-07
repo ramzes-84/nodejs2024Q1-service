@@ -1,6 +1,4 @@
-import { IUser } from './types';
-
-export class User implements IUser {
+export class User {
   id: string;
   login: string;
   password: string;

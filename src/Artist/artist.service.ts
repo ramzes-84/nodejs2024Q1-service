@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DataBase } from 'src/database/types';
 import { dB } from 'src/database/dB';
 import { FindID } from 'src/User/Dto/types';
-import { CreateArtistDto } from './Dto/types';
+import { CreateArtistDto, UpdateArtistDto } from './Dto/types';
 import { Artist } from './Artist';
 
 @Injectable()
@@ -23,21 +23,16 @@ export class ArtistService {
     this.dB.artists[newArtist.id] = newArtist;
     return newArtist;
   }
-  //   updatePassw(params: FindID, updatePasswordDto: UpdatePasswordDto) {
-  //     const user = this.dB.users[params.id];
-  //     if (!user) return;
-  //     if (user.password === updatePasswordDto.oldPassword) {
-  //       user.password = updatePasswordDto.newPassword;
-  //       user.version = user.version + 1;
-  //       user.updatedAt = Date.now();
-  //       return user;
-  //     } else {
-  //       return null;
-  //     }
-  //   }
-  //   delete(params: FindID) {
-  //     if (!this.dB.users[params.id])
-  //       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-  //     delete this.dB.users[params.id];
-  //   }
+  updateArtist(params: FindID, updateArtistDto: UpdateArtistDto) {
+    const artist = this.dB.artists[params.id];
+    if (!artist)
+      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+    Object.assign(artist, updateArtistDto);
+    return artist;
+  }
+  delete(params: FindID) {
+    if (!this.dB.artists[params.id])
+      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+    delete this.dB.artists[params.id];
+  }
 }

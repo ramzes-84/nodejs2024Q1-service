@@ -1,16 +1,18 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Header,
   HttpCode,
   HttpStatus,
   Param,
   Post,
+  Put,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { FindID } from 'src/User/Dto/types';
-import { CreateArtistDto } from './Dto/types';
+import { CreateArtistDto, UpdateArtistDto } from './Dto/types';
 
 @Controller('artist')
 export class ArtistController {
@@ -35,25 +37,19 @@ export class ArtistController {
     return this.artistService.create(createArtistDto);
   }
 
-  //   @Put(':id')
-  //   @Header('content-type', 'application/json')
-  //   updatePassw(
-  //     @Param() params: FindID,
-  //     @Body() updatePasswordDto: UpdatePasswordDto,
-  //   ) {
-  //     const user = this.artistService.updatePassw(params, updatePasswordDto);
-  //     if (typeof user === 'undefined') {
-  //       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-  //     } else if (!user) {
-  //       throw new HttpException('Incorrect old password', HttpStatus.FORBIDDEN);
-  //     }
-  //     return user;
-  //   }
+  @Put(':id')
+  @Header('content-type', 'application/json')
+  updateArtist(
+    @Param() params: FindID,
+    @Body() updateArtistDto: UpdateArtistDto,
+  ) {
+    return this.artistService.updateArtist(params, updateArtistDto);
+  }
 
-  //   @Delete(':id')
-  //   @Header('content-type', 'application/json')
-  //   @HttpCode(HttpStatus.NO_CONTENT)
-  //   delete(@Param() params: FindID) {
-  //     this.artistService.delete(params);
-  //   }
+  @Delete(':id')
+  @Header('content-type', 'application/json')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  delete(@Param() params: FindID) {
+    this.artistService.delete(params);
+  }
 }

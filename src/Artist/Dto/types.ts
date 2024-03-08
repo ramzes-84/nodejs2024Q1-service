@@ -1,19 +1,21 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsBoolean } from 'class-validator';
 
 export class CreateArtistDto {
-  @IsString()
   @IsNotEmpty()
-  name: string;
   @IsString()
+  name: string;
+
+  @IsNotEmpty()
+  @IsBoolean()
   grammy: boolean;
 }
 
-// export class UpdatePasswordDto {
-//   @IsString()
-//   @IsNotEmpty()
-//   oldPassword: string;
+export class UpdateArtistDto {
+  @IsNotEmpty()
+  @IsString()
+  name: string;
 
-//   @IsString()
-//   @IsNotEmpty()
-//   newPassword: string;
-// }
+  @IsNotEmpty()
+  @IsBoolean()
+  grammy: boolean;
+}

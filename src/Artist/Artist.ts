@@ -7,10 +7,8 @@ export class Artist {
   grammy: boolean;
 
   constructor(createArtistDto: CreateArtistDto) {
-    console.log(createArtistDto.grammy);
-    console.log(!!createArtistDto.grammy);
     this.id = v4();
     this.name = createArtistDto.name;
-    this.grammy = !!createArtistDto.grammy || false;
+    this.grammy = createArtistDto.grammy;
   }
 }

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Header,
   HttpCode,
@@ -51,5 +52,12 @@ export class UserController {
       throw new HttpException('Incorrect old password', HttpStatus.FORBIDDEN);
     }
     return user;
+  }
+
+  @Delete(':id')
+  @Header('content-type', 'application/json')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  delete(@Param() params: FindID) {
+    this.userService.delete(params);
   }
 }

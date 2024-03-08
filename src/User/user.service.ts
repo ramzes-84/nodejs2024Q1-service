@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto, FindID, UpdatePasswordDto } from './Dto/types';
 import { DataBase } from 'src/database/types';
 import { dB } from 'src/database/dB';
@@ -31,5 +31,10 @@ export class UserService {
     } else {
       return null;
     }
+  }
+  delete(params: FindID) {
+    if (!this.dB.users[params.id])
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    delete this.dB.users[params.id];
   }
 }

@@ -12,7 +12,8 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, FindID, UpdatePasswordDto } from './Dto/types';
+import { CreateUserDto, UpdatePasswordDto } from './Dto/types';
+import { ErrMsg, FindID } from 'src/types';
 
 @Controller('user')
 export class UserController {
@@ -28,7 +29,7 @@ export class UserController {
   getUserById(@Param() params: FindID) {
     const searchResult = this.userService.getUserById(params);
     if (!searchResult)
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(ErrMsg.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
     return searchResult;
   }
 
@@ -47,9 +48,9 @@ export class UserController {
   ) {
     const user = this.userService.updatePassw(params, updatePasswordDto);
     if (typeof user === 'undefined') {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(ErrMsg.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
     } else if (!user) {
-      throw new HttpException('Incorrect old password', HttpStatus.FORBIDDEN);
+      throw new HttpException(ErrMsg.WRONG_PASSW, HttpStatus.FORBIDDEN);
     }
     return user;
   }

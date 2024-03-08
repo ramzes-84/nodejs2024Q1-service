@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -8,11 +8,6 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   password: string;
-}
-
-export class FindID {
-  @IsUUID('4')
-  id: string;
 }
 
 export class UpdatePasswordDto {

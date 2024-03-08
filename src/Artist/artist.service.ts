@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DataBase } from 'src/database/types';
 import { dB } from 'src/database/dB';
-import { FindID } from 'src/User/Dto/types';
+import { ErrMsg, FindID } from 'src/types';
 import { CreateArtistDto, UpdateArtistDto } from './Dto/types';
 import { Artist } from './Artist';
 
@@ -15,7 +15,7 @@ export class ArtistService {
   getArtistById(params: FindID) {
     const artist = this.dB.artists[params.id];
     if (!artist)
-      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(ErrMsg.ARTIST_NOT_FOUND, HttpStatus.NOT_FOUND);
     return artist;
   }
   create(artist: CreateArtistDto) {
@@ -26,13 +26,13 @@ export class ArtistService {
   updateArtist(params: FindID, updateArtistDto: UpdateArtistDto) {
     const artist = this.dB.artists[params.id];
     if (!artist)
-      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(ErrMsg.ARTIST_NOT_FOUND, HttpStatus.NOT_FOUND);
     Object.assign(artist, updateArtistDto);
     return artist;
   }
   delete(params: FindID) {
     if (!this.dB.artists[params.id])
-      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+      throw new HttpException(ErrMsg.ARTIST_NOT_FOUND, HttpStatus.NOT_FOUND);
     delete this.dB.artists[params.id];
   }
 }

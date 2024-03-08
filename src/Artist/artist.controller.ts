@@ -11,7 +11,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { ArtistService } from './artist.service';
-import { FindID } from 'src/User/Dto/types';
+import { FindID } from 'src/types';
 import { CreateArtistDto, UpdateArtistDto } from './Dto/types';
 
 @Controller('artist')

@@ -6,10 +6,17 @@ import { UserService } from './User/user.service';
 import { ConfigModule } from '@nestjs/config';
 import { ArtistController } from './Artist/artist.controller';
 import { ArtistService } from './Artist/artist.service';
+import { AlbumController } from './Album/album.controller';
+import { AlbumService } from './Album/album.service';
 
 @Module({
   imports: [ConfigModule.forRoot()],
-  controllers: [AppController, UserController, ArtistController],
-  providers: [AppService, UserService, ArtistService],
+  controllers: [
+    AppController,
+    UserController,
+    ArtistController,
+    AlbumController,
+  ],
+  providers: [AppService, UserService, ArtistService, AlbumService],
 })
 export class AppModule {}

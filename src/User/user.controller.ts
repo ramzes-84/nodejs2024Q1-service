@@ -33,7 +33,7 @@ export class UserController {
   @Post()
   @Header('content-type', 'application/json')
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() createUserDto: CreateUserDto): string {
+  create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 }

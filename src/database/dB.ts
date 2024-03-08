@@ -4,4 +4,5 @@ export const dB: DataBase = {
   users: {},
   artists: {},
   albums: {},
+  tracks: {},
 };

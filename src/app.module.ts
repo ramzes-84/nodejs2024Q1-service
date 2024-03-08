@@ -8,6 +8,8 @@ import { ArtistController } from './Artist/artist.controller';
 import { ArtistService } from './Artist/artist.service';
 import { AlbumController } from './Album/album.controller';
 import { AlbumService } from './Album/album.service';
+import { TrackController } from './Track/track.controller';
+import { TrackService } from './Track/track.service';
 
 @Module({
   imports: [ConfigModule.forRoot()],
@@ -16,7 +18,14 @@ import { AlbumService } from './Album/album.service';
     UserController,
     ArtistController,
     AlbumController,
+    TrackController,
   ],
-  providers: [AppService, UserService, ArtistService, AlbumService],
+  providers: [
+    AppService,
+    UserService,
+    ArtistService,
+    AlbumService,
+    TrackService,
+  ],
 })
 export class AppModule {}

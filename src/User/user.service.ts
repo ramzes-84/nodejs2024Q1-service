@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto, FindID } from './Dto/types';
+import { CreateUserDto, FindID, UpdatePasswordDto } from './Dto/types';
 import { DataBase } from 'src/database/types';
 import { dB } from 'src/database/dB';
 import { User } from './User';
@@ -19,5 +19,17 @@ export class UserService {
     const newUser = new User(user);
     this.dB.users[newUser.id] = newUser;
     return newUser;
+  }
+  updatePassw(params: FindID, updatePasswordDto: UpdatePasswordDto) {
+    const user = this.dB.users[params.id];
+    if (!user) return;
+    if (user.password === updatePasswordDto.oldPassword) {
+      user.password = updatePasswordDto.newPassword;
+      user.version = user.version + 1;
+      user.updatedAt = Date.now();
+      return user;
+    } else {
+      return null;
+    }
   }
 }

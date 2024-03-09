@@ -1,7 +1,9 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsUUID } from 'class-validator';
 
 export class FindID {
   @IsUUID('4')
+  @ApiProperty({ example: '0a35dd62-e09f-444b-a628-f4e7c6954f57' })
   id: string;
 }
 

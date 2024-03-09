@@ -5,6 +5,10 @@
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
 
+## OpenApi Specification explorer
+
+To see OpenApi specs (including swagger-ui) run the server and go to 'http://localhost:/doc' in browser
+
 ## Downloading
 
 ```

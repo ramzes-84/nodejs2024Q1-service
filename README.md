@@ -7,7 +7,8 @@
 
 ## OpenApi Specification explorer
 
-To see OpenApi specs (including swagger-ui) run the server and go to 'http://localhost:/doc' in browser
+To see OpenApi specs (including swagger-ui) run the server and go to 'http://localhost:4000/doc' in browser.
+To generate and download a Swagger JSON file, navigate to 'http://localhost:4000/doc-json'.
 
 ## Downloading
 

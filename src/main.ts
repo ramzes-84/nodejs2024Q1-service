@@ -4,6 +4,12 @@ import { env } from 'node:process';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
+const config = new DocumentBuilder()
+  .setTitle('Home Lib')
+  .setDescription('The Home Lib API description')
+  .setVersion('1.0')
+  .build();
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
@@ -12,11 +18,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  const config = new DocumentBuilder()
-    .setTitle('Home Lib')
-    .setDescription('The Home Lib API description')
-    .setVersion('1.0')
-    .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('doc', app, document);
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));

@@ -4,6 +4,7 @@ import { dB } from 'src/database/dB';
 import { ErrMsg, FindID } from 'src/types';
 import { CreateArtistDto, UpdateArtistDto } from './Dto/types';
 import { Artist } from './Artist';
+import { removeIdPrints } from 'src/utils';
 
 @Injectable()
 export class ArtistService {
@@ -33,6 +34,7 @@ export class ArtistService {
   delete(params: FindID) {
     if (!this.dB.artists[params.id])
       throw new HttpException(ErrMsg.ARTIST_NOT_FOUND, HttpStatus.NOT_FOUND);
+    removeIdPrints(dB, params.id);
     delete this.dB.artists[params.id];
   }
 }

@@ -4,6 +4,7 @@ import { dB } from 'src/database/dB';
 import { ErrMsg, FindID } from 'src/types';
 import { CreateAlbumDto, UpdateAlbumDto } from './Dto/types';
 import { Album } from './album';
+import { removeIdPrints } from 'src/utils';
 
 @Injectable()
 export class AlbumService {
@@ -33,6 +34,7 @@ export class AlbumService {
   delete(params: FindID) {
     if (!this.dB.albums[params.id])
       throw new HttpException(ErrMsg.ALBUM_NOT_FOUND, HttpStatus.NOT_FOUND);
+    removeIdPrints(dB, params.id);
     delete this.dB.albums[params.id];
   }
 }

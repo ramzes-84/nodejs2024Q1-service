@@ -11,4 +11,5 @@ export enum ErrMsg {
   ARTIST_NOT_FOUND = 'Artist not found',
   TRACK_NOT_FOUND = 'Track not found',
   WRONG_PASSW = 'Incorrect old password',
+  NOT_IN_FAVS = 'ID not found in favorites',
 }

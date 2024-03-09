@@ -8,4 +8,9 @@ export interface DataBase {
   artists: { [id: string]: Artist };
   albums: { [id: string]: Album };
   tracks: { [id: string]: Track };
+  favs: {
+    artists: Set<string>;
+    albums: Set<string>;
+    tracks: Set<string>;
+  };
 }

@@ -4,6 +4,7 @@ import { dB } from 'src/database/dB';
 import { ErrMsg, FindID } from 'src/types';
 import { CreateTrackDto, UpdateTrackDto } from './Dto/types';
 import { Track } from './Track';
+import { removeIdPrints } from 'src/utils';
 
 @Injectable()
 export class TrackService {
@@ -33,6 +34,7 @@ export class TrackService {
   delete(params: FindID) {
     if (!this.dB.tracks[params.id])
       throw new HttpException(ErrMsg.TRACK_NOT_FOUND, HttpStatus.NOT_FOUND);
+    removeIdPrints(dB, params.id);
     delete this.dB.tracks[params.id];
   }
 }

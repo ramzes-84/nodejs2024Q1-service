@@ -5,6 +5,11 @@
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
 
+## OpenApi Specification explorer
+
+To see OpenApi specs (including swagger-ui) run the server and go to 'http://localhost:4000/doc' in browser.
+To generate and download a Swagger JSON file, navigate to 'http://localhost:4000/doc-json'.
+
 ## Downloading
 
 ```
@@ -14,7 +19,7 @@ git clone {repository URL}
 ## Installing NPM modules
 
 ```
-npm install
+npm install --legacy-peer-deps
 ```
 
 ## Running application

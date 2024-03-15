@@ -46,7 +46,7 @@ export class AlbumController {
   @Delete(':id')
   @Header('content-type', 'application/json')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param() params: FindID) {
-    this.albumService.delete(params);
+  async delete(@Param() params: FindID) {
+    await this.albumService.delete(params);
   }
 }

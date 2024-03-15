@@ -1,40 +1,59 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { DataBase } from 'src/database/types';
-import { dB } from 'src/database/dB';
 import { ErrMsg, FindID } from 'src/types';
 import { CreateAlbumDto, UpdateAlbumDto } from './Dto/types';
 import { Album } from './album';
 import { removeIdPrints } from 'src/utils';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class AlbumService {
-  protected dB: DataBase = dB;
+  protected prisma = new PrismaClient();
 
-  getAllAlbums() {
-    return Object.values(this.dB.albums);
+  async getAllAlbums() {
+    return await this.prisma.album.findMany();
   }
-  getAlbumById(params: FindID) {
-    const album = this.dB.albums[params.id];
-    if (!album)
+
+  async getAlbumById(params: FindID) {
+    const foundEntity = await this.prisma.album.findUnique({
+      where: { id: params.id },
+    });
+    if (foundEntity === null)
       throw new HttpException(ErrMsg.ALBUM_NOT_FOUND, HttpStatus.NOT_FOUND);
-    return album;
+    return foundEntity;
   }
-  create(album: CreateAlbumDto) {
-    const newAlbum = new Album(album);
-    this.dB.albums[newAlbum.id] = newAlbum;
-    return newAlbum;
+
+  async create(album: CreateAlbumDto) {
+    const newEntity = new Album(album);
+    return await this.prisma.album.create({
+      data: {
+        id: newEntity.id,
+        name: newEntity.name,
+        year: newEntity.year,
+        artistId: newEntity.artistId,
+      },
+    });
   }
-  updateAlbum(params: FindID, updateAlbumDto: UpdateAlbumDto) {
-    const album = this.dB.albums[params.id];
-    if (!album)
+
+  async updateAlbum(params: FindID, updateAlbumDto: UpdateAlbumDto) {
+    const foundEntity = await this.prisma.album.findUnique({
+      where: { id: params.id },
+    });
+    if (!foundEntity)
       throw new HttpException(ErrMsg.ALBUM_NOT_FOUND, HttpStatus.NOT_FOUND);
-    Object.assign(album, updateAlbumDto);
-    return album;
+    return await this.prisma.album.update({
+      where: { id: params.id },
+      data: { ...foundEntity, ...updateAlbumDto },
+    });
   }
-  delete(params: FindID) {
-    if (!this.dB.albums[params.id])
+
+  async delete(params: FindID) {
+    try {
+      await this.prisma.album.delete({
+        where: { id: params.id },
+      });
+      await removeIdPrints(this.prisma, params.id);
+    } catch {
       throw new HttpException(ErrMsg.ALBUM_NOT_FOUND, HttpStatus.NOT_FOUND);
-    removeIdPrints(dB, params.id);
-    delete this.dB.albums[params.id];
+    }
   }
 }

@@ -46,19 +46,13 @@ export class UserController {
     @Param() params: FindID,
     @Body() updatePasswordDto: UpdatePasswordDto,
   ) {
-    const user = this.userService.updatePassw(params, updatePasswordDto);
-    if (typeof user === 'undefined') {
-      throw new HttpException(ErrMsg.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
-    } else if (!user) {
-      throw new HttpException(ErrMsg.WRONG_PASSW, HttpStatus.FORBIDDEN);
-    }
-    return user;
+    return this.userService.updatePassw(params, updatePasswordDto);
   }
 
   @Delete(':id')
   @Header('content-type', 'application/json')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param() params: FindID) {
-    this.userService.delete(params);
+  async delete(@Param() params: FindID) {
+    await this.userService.delete(params);
   }
 }

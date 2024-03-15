@@ -49,7 +49,7 @@ export class ArtistController {
   @Delete(':id')
   @Header('content-type', 'application/json')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param() params: FindID) {
-    this.artistService.delete(params);
+  async delete(@Param() params: FindID) {
+    await this.artistService.delete(params);
   }
 }

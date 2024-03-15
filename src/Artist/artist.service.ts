@@ -1,40 +1,58 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { DataBase } from 'src/database/types';
-import { dB } from 'src/database/dB';
 import { ErrMsg, FindID } from 'src/types';
 import { CreateArtistDto, UpdateArtistDto } from './Dto/types';
 import { Artist } from './Artist';
 import { removeIdPrints } from 'src/utils';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class ArtistService {
-  protected dB: DataBase = dB;
+  protected prisma = new PrismaClient();
 
-  getAllArtists() {
-    return Object.values(this.dB.artists);
+  async getAllArtists() {
+    return await this.prisma.artist.findMany();
   }
-  getArtistById(params: FindID) {
-    const artist = this.dB.artists[params.id];
-    if (!artist)
+
+  async getArtistById(params: FindID) {
+    const foundEntity = await this.prisma.artist.findUnique({
+      where: { id: params.id },
+    });
+    if (foundEntity === null)
       throw new HttpException(ErrMsg.ARTIST_NOT_FOUND, HttpStatus.NOT_FOUND);
-    return artist;
+    return foundEntity;
   }
-  create(artist: CreateArtistDto) {
-    const newArtist = new Artist(artist);
-    this.dB.artists[newArtist.id] = newArtist;
-    return newArtist;
+
+  async create(artist: CreateArtistDto) {
+    const newEntity = new Artist(artist);
+    return await this.prisma.artist.create({
+      data: {
+        id: newEntity.id,
+        name: newEntity.name,
+        grammy: newEntity.grammy,
+      },
+    });
   }
-  updateArtist(params: FindID, updateArtistDto: UpdateArtistDto) {
-    const artist = this.dB.artists[params.id];
-    if (!artist)
+
+  async updateArtist(params: FindID, updateArtistDto: UpdateArtistDto) {
+    const foundEntity = await this.prisma.artist.findUnique({
+      where: { id: params.id },
+    });
+    if (!foundEntity)
       throw new HttpException(ErrMsg.ARTIST_NOT_FOUND, HttpStatus.NOT_FOUND);
-    Object.assign(artist, updateArtistDto);
-    return artist;
+    return await this.prisma.artist.update({
+      where: { id: params.id },
+      data: { ...foundEntity, ...updateArtistDto },
+    });
   }
-  delete(params: FindID) {
-    if (!this.dB.artists[params.id])
+
+  async delete(params: FindID) {
+    try {
+      await this.prisma.artist.delete({
+        where: { id: params.id },
+      });
+      await removeIdPrints(this.prisma, params.id);
+    } catch {
       throw new HttpException(ErrMsg.ARTIST_NOT_FOUND, HttpStatus.NOT_FOUND);
-    removeIdPrints(dB, params.id);
-    delete this.dB.artists[params.id];
+    }
   }
 }

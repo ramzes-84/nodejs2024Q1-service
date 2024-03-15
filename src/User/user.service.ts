@@ -21,34 +21,61 @@ export class UserService {
     return foundEntity;
   }
 
-  async create(user: CreateUserDto) {
+  async create(user: CreateUserDto): Promise<Omit<User, 'password'>> {
     const newEntity = new User(user);
-    return await this.prisma.user.create({
+    const response = await this.prisma.user.create({
       data: {
         id: newEntity.id,
         login: newEntity.login,
         password: newEntity.password,
         version: newEntity.version,
-        // createdAt: newUser.createdAt,
-        // updatedAt: newUser.updatedAt,
+      },
+      select: {
+        id: true,
+        login: true,
+        version: true,
+        createdAt: true,
+        updatedAt: true,
+        password: false,
       },
     });
+    return {
+      ...response,
+      createdAt: response.createdAt.getTime(),
+      updatedAt: response.updatedAt.getTime(),
+    };
   }
 
-  async updatePassw(params: FindID, updatePasswordDto: UpdatePasswordDto) {
+  async updatePassw(
+    params: FindID,
+    updatePasswordDto: UpdatePasswordDto,
+  ): Promise<Omit<User, 'password'>> {
     const foundEntity = await this.prisma.user.findUnique({
       where: { id: params.id },
     });
     if (!foundEntity)
       throw new HttpException(ErrMsg.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
     if (foundEntity.password === updatePasswordDto.oldPassword) {
-      return await this.prisma.user.update({
+      const response = await this.prisma.user.update({
         where: { id: params.id },
         data: {
           password: updatePasswordDto.newPassword,
           version: foundEntity.version + 1,
         },
+        select: {
+          id: true,
+          login: true,
+          version: true,
+          createdAt: true,
+          updatedAt: true,
+          password: false,
+        },
       });
+      return {
+        ...response,
+        createdAt: response.createdAt.getTime(),
+        updatedAt: response.updatedAt.getTime(),
+      };
     } else {
       throw new HttpException(ErrMsg.WRONG_PASSW, HttpStatus.FORBIDDEN);
     }

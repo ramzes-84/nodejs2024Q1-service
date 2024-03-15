@@ -1,40 +1,60 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { DataBase } from 'src/database/types';
-import { dB } from 'src/database/dB';
 import { ErrMsg, FindID } from 'src/types';
 import { CreateTrackDto, UpdateTrackDto } from './Dto/types';
 import { Track } from './Track';
 import { removeIdPrints } from 'src/utils';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class TrackService {
-  protected dB: DataBase = dB;
+  protected prisma = new PrismaClient();
 
-  getAllTracks() {
-    return Object.values(this.dB.tracks);
+  async getAllTracks() {
+    return await this.prisma.track.findMany();
   }
-  getTrackById(params: FindID) {
-    const track = this.dB.tracks[params.id];
-    if (!track)
+
+  async getTrackById(params: FindID) {
+    const foundEntity = await this.prisma.track.findUnique({
+      where: { id: params.id },
+    });
+    if (foundEntity === null)
       throw new HttpException(ErrMsg.TRACK_NOT_FOUND, HttpStatus.NOT_FOUND);
-    return track;
+    return foundEntity;
   }
-  create(track: CreateTrackDto) {
-    const newTrack = new Track(track);
-    this.dB.tracks[newTrack.id] = newTrack;
-    return newTrack;
+
+  async create(track: CreateTrackDto) {
+    const newEntity = new Track(track);
+    return await this.prisma.track.create({
+      data: {
+        id: newEntity.id,
+        name: newEntity.name,
+        duration: newEntity.duration,
+        albumId: newEntity.albumId,
+        artistId: newEntity.artistId,
+      },
+    });
   }
-  updateTrack(params: FindID, updateTrackDto: UpdateTrackDto) {
-    const track = this.dB.tracks[params.id];
-    if (!track)
+
+  async updateTrack(params: FindID, updateTrackDto: UpdateTrackDto) {
+    const foundEntity = await this.prisma.track.findUnique({
+      where: { id: params.id },
+    });
+    if (!foundEntity)
       throw new HttpException(ErrMsg.TRACK_NOT_FOUND, HttpStatus.NOT_FOUND);
-    Object.assign(track, updateTrackDto);
-    return track;
+    return await this.prisma.track.update({
+      where: { id: params.id },
+      data: { ...foundEntity, ...updateTrackDto },
+    });
   }
-  delete(params: FindID) {
-    if (!this.dB.tracks[params.id])
+
+  async delete(params: FindID) {
+    try {
+      await this.prisma.track.delete({
+        where: { id: params.id },
+      });
+      await removeIdPrints(this.prisma, params.id);
+    } catch {
       throw new HttpException(ErrMsg.TRACK_NOT_FOUND, HttpStatus.NOT_FOUND);
-    removeIdPrints(dB, params.id);
-    delete this.dB.tracks[params.id];
+    }
   }
 }

@@ -46,7 +46,7 @@ export class TrackController {
   @Delete(':id')
   @Header('content-type', 'application/json')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param() params: FindID) {
-    this.trackService.delete(params);
+  async delete(@Param() params: FindID) {
+    await this.trackService.delete(params);
   }
 }

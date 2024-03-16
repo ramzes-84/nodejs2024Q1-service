@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ErrMsg, FindID } from 'src/types';
 import { CreateAlbumDto, UpdateAlbumDto } from './Dto/types';
-import { Album } from './album';
+import { Album } from './Album';
 import { removeIdPrints } from 'src/utils';
 import { PrismaClient } from '@prisma/client';
 

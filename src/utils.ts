@@ -1,10 +1,6 @@
-import { PrismaClient, Prisma } from '@prisma/client';
-import { DefaultArgs } from '@prisma/client/runtime/library';
+import { PrismaClient } from '@prisma/client';
 
-export const removeIdPrints = async (
-  prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>,
-  id: string,
-) => {
+export const removeIdPrints = async (prisma: PrismaClient, id: string) => {
   await prisma.track.updateMany({
     where: { albumId: id },
     data: { albumId: null },

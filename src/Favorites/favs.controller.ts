@@ -16,7 +16,7 @@ export class FavoriteController {
   constructor(private readonly favoriteService: FavoriteService) {}
   @Get()
   @Header('content-type', 'application/json')
-  getAllTracks() {
+  getAll() {
     return this.favoriteService.getAllFavs();
   }
 

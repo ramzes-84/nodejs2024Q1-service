@@ -1,53 +1,158 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { DataBase } from 'src/database/types';
-import { dB } from 'src/database/dB';
 import { ErrMsg, FindID } from 'src/types';
-import { getFavsEntities } from './favs.utils';
+// import { getFavsEntities } from './favs.utils';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class FavoriteService {
-  protected dB: DataBase = dB;
+  protected prisma = new PrismaClient();
 
-  getAllFavs() {
-    return getFavsEntities(dB);
+  async getAllFavs() {
+    return await this.prisma.favorites.findFirst({
+      include: {
+        albums: {
+          select: { artistId: true, id: true, name: true, year: true },
+        },
+        artists: { select: { grammy: true, id: true, name: true } },
+        tracks: {
+          select: {
+            albumId: true,
+            artistId: true,
+            duration: true,
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
   }
-  addTrack(params: FindID) {
-    if (!this.dB.tracks[params.id])
+
+  async addTrack(params: FindID) {
+    const foundEntity = await this.prisma.track.findUnique({
+      where: { id: params.id },
+    });
+    if (!foundEntity)
       throw new HttpException(
         ErrMsg.TRACK_NOT_FOUND,
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
-    this.dB.favs.tracks.add(params.id);
+    await this.prisma.favorites.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        tracks: {
+          connect: {
+            id: params.id,
+          },
+        },
+      },
+    });
   }
-  addArtist(params: FindID) {
-    if (!this.dB.artists[params.id])
+
+  async addArtist(params: FindID) {
+    const foundEntity = await this.prisma.artist.findUnique({
+      where: { id: params.id },
+    });
+    if (!foundEntity)
       throw new HttpException(
         ErrMsg.ARTIST_NOT_FOUND,
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
-    this.dB.favs.artists.add(params.id);
+    await this.prisma.favorites.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        artists: {
+          connect: {
+            id: params.id,
+          },
+        },
+      },
+    });
   }
-  addAlbum(params: FindID) {
-    if (!this.dB.albums[params.id])
+
+  async addAlbum(params: FindID) {
+    const foundEntity = await this.prisma.album.findUnique({
+      where: { id: params.id },
+    });
+    if (!foundEntity)
       throw new HttpException(
         ErrMsg.ALBUM_NOT_FOUND,
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
-    this.dB.favs.albums.add(params.id);
+    await this.prisma.favorites.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        albums: {
+          connect: {
+            id: params.id,
+          },
+        },
+      },
+    });
   }
-  deleteTrack(params: FindID) {
-    if (!this.dB.favs.tracks.has(params.id))
-      throw new HttpException(ErrMsg.NOT_IN_FAVS, HttpStatus.NOT_FOUND);
-    this.dB.favs.tracks.delete(params.id);
+
+  async deleteTrack(params: FindID) {
+    const foundEntity = await this.prisma.track.findUnique({
+      where: { id: params.id },
+    });
+    if (!foundEntity)
+      throw new HttpException(ErrMsg.TRACK_NOT_FOUND, HttpStatus.NOT_FOUND);
+    await this.prisma.favorites.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        tracks: {
+          disconnect: {
+            id: params.id,
+          },
+        },
+      },
+    });
   }
-  deleteArtist(params: FindID) {
-    if (!this.dB.favs.artists.has(params.id))
-      throw new HttpException(ErrMsg.NOT_IN_FAVS, HttpStatus.NOT_FOUND);
-    this.dB.favs.artists.delete(params.id);
+
+  async deleteArtist(params: FindID) {
+    const foundEntity = await this.prisma.artist.findUnique({
+      where: { id: params.id },
+    });
+    if (!foundEntity)
+      throw new HttpException(ErrMsg.ARTIST_NOT_FOUND, HttpStatus.NOT_FOUND);
+    await this.prisma.favorites.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        artists: {
+          disconnect: {
+            id: params.id,
+          },
+        },
+      },
+    });
   }
-  deleteAlbum(params: FindID) {
-    if (!this.dB.favs.albums.has(params.id))
-      throw new HttpException(ErrMsg.NOT_IN_FAVS, HttpStatus.NOT_FOUND);
-    this.dB.favs.albums.delete(params.id);
+
+  async deleteAlbum(params: FindID) {
+    const foundEntity = await this.prisma.album.findUnique({
+      where: { id: params.id },
+    });
+    if (!foundEntity)
+      throw new HttpException(ErrMsg.ALBUM_NOT_FOUND, HttpStatus.NOT_FOUND);
+    await this.prisma.favorites.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        albums: {
+          disconnect: {
+            id: params.id,
+          },
+        },
+      },
+    });
   }
 }

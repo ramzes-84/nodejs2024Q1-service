@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ErrMsg, FindID } from 'src/types';
-// import { getFavsEntities } from './favs.utils';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()

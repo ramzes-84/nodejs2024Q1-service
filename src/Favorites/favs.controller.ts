@@ -44,21 +44,21 @@ export class FavoriteController {
   @Delete('track/:id')
   @Header('content-type', 'application/json')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteTrack(@Param() params: FindID) {
-    this.favoriteService.deleteTrack(params);
+  async deleteTrack(@Param() params: FindID) {
+    await this.favoriteService.deleteTrack(params);
   }
 
   @Delete('album/:id')
   @Header('content-type', 'application/json')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteAlbum(@Param() params: FindID) {
-    this.favoriteService.deleteAlbum(params);
+  async deleteAlbum(@Param() params: FindID) {
+    await this.favoriteService.deleteAlbum(params);
   }
 
   @Delete('artist/:id')
   @Header('content-type', 'application/json')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteArtist(@Param() params: FindID) {
-    this.favoriteService.deleteArtist(params);
+  async deleteArtist(@Param() params: FindID) {
+    await this.favoriteService.deleteArtist(params);
   }
 }

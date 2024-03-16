@@ -25,6 +25,11 @@ npm install
 ## Running application
 
 ```
+npx prisma migrate reset
+npx prisma generate
+npx prisma migrate dev --name init
+npx prisma db seed
+npx prisma format
 npm start
 ```
 
@@ -75,36 +80,3 @@ npm run format
 Press <kbd>F5</kbd> to debug.
 
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
-
-<!--
-Next steps:
-1. Set the DATABASE_URL in the .env file to point to your existing database. If your database has no tables yet, read https://pris.ly/d/getting-started
-2. Set the provider of the datasource block in schema.prisma to match your database: postgresql, mysql, sqlite, sqlserver, mongodb or cockroachdb.
-3. Run prisma db pull to turn your database schema into a Prisma schema.
-4. Run prisma generate to generate the Prisma Client. You can then start querying your database. -->
-
-model Post {
-id Int @id @default(autoincrement())
-createdAt DateTime @default(now())
-updatedAt DateTime @updatedAt
-title String @db.VarChar(255)
-content String?
-published Boolean @default(false)
-author User @relation(fields: [authorId], references: [id])
-authorId Int
-}
-
-model Profile {
-id Int @id @default(autoincrement())
-bio String?
-user User @relation(fields: [userId], references: [id])
-userId Int @unique
-}
-
-model User {
-id Int @id @default(autoincrement())
-email String @unique
-name String?
-posts Post[]
-profile Profile?
-}

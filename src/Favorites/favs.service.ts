@@ -7,6 +7,7 @@ export class FavoriteService {
   protected prisma = new PrismaClient();
 
   async getAllFavs() {
+    await this.prisma.favorites.create({});
     return await this.prisma.favorites.findFirst({
       include: {
         albums: {

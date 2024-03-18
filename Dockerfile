@@ -43,8 +43,10 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Copy the rest of the source files into the image.
 COPY . .
 # Run the build script.
-# COPY prisma ./prisma/
+COPY prisma ./prisma/
 RUN npx prisma generate
+# RUN npx prisma migrate deploy
+# RUN npx prisma db seed
 RUN npm run build
 
 ################################################################################
@@ -65,6 +67,7 @@ COPY package.json .
 # the built application from the build stage into the image.
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=build /usr/src/app/prisma ./prisma
 COPY --from=build /usr/src/app/dist ./dist
 
 
@@ -72,4 +75,4 @@ COPY --from=build /usr/src/app/dist ./dist
 EXPOSE 4000
 
 # Run the application.
-CMD [ "npm", "run", "start:prod" ]
+CMD [ "npm", "run", "start:migrate:prod" ]

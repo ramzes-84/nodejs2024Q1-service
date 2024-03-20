@@ -28,15 +28,10 @@ Create a new .env file and copy the content of .env.example there
 npm install
 ```
 
-## Running application
+## Docker containerization
 
 ```
-<!-- npx prisma migrate reset
-npx prisma generate
-npx prisma migrate dev --name init
-npx prisma db seed
-npx prisma format -->
-npm start
+docker compose watch
 ```
 
 After starting the app on port (4000 as default) you can open

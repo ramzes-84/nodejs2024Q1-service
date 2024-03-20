@@ -12,6 +12,12 @@
 git clone https://github.com/ramzes-84/nodejs2024Q1-service.git
 ```
 
+## Choosing branch
+
+```
+git checkout docker-improve
+```
+
 ## Creating .env file
 
 Create a new .env file and copy the content of .env.example there

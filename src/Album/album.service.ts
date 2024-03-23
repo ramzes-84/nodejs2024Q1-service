@@ -4,12 +4,18 @@ import { CreateAlbumDto, UpdateAlbumDto } from './Dto/types';
 import { Album } from './Album';
 import { removeIdPrints } from 'src/utils';
 import { PrismaClient } from '@prisma/client';
+import { Request } from 'express';
+import { LoggingService } from 'src/Logger/logger.service';
 
 @Injectable()
 export class AlbumService {
   protected prisma = new PrismaClient();
 
-  async getAllAlbums() {
+  constructor(private loggingService: LoggingService) {
+    this.loggingService.setContext('AppService');
+  }
+
+  async getAllAlbums(request: Request) {
     return await this.prisma.album.findMany();
   }
 

@@ -9,18 +9,20 @@ import {
   Param,
   Post,
   Put,
+  Req,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { FindID } from 'src/types';
 import { CreateAlbumDto, UpdateAlbumDto } from './Dto/types';
+import { Request } from 'express';
 
 @Controller('album')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
   @Get()
   @Header('content-type', 'application/json')
-  getAllAlbums() {
-    return this.albumService.getAllAlbums();
+  getAllAlbums(@Req() request: Request) {
+    return this.albumService.getAllAlbums(request);
   }
 
   @Get(':id')

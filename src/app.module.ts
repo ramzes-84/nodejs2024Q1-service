@@ -12,9 +12,10 @@ import { TrackController } from './Track/track.controller';
 import { TrackService } from './Track/track.service';
 import { FavoriteController } from './Favorites/favs.controller';
 import { FavoriteService } from './Favorites/favs.service';
+import { LoggerModule } from './Logger/logger.module';
 
 @Module({
-  imports: [ConfigModule.forRoot()],
+  imports: [ConfigModule.forRoot(), LoggerModule],
   controllers: [
     AppController,
     UserController,

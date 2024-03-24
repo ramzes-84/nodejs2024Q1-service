@@ -8,7 +8,7 @@ export class AppService {
   }
 
   getHello(): string {
-    this.loggingService.logToFile();
+    this.loggingService.log('example');
     return 'Hello world';
   }
 }

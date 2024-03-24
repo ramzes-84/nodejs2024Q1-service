@@ -17,6 +17,8 @@ services:
       watch: 
         - path: ./src
           action: rebuild
+    volumes:
+      - rss-home-lib:/var/lib/rss-home-lib/data
   postgres:
     image: postgres
     restart: always
@@ -33,3 +35,4 @@ networks:
     driver: bridge
 volumes:
   postgres:
+  rss-home-lib:

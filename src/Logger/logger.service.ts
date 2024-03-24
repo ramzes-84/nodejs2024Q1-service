@@ -14,10 +14,10 @@ export class LoggingService extends ConsoleLogger implements LoggerService {
     this.fileSize = +env.LOGGER_FILE_SIZE;
   }
 
-  log(msg: string) {
-    super.log(msg);
-    this.logToFile(msg);
-  }
+  // log(msg: string) {
+  //   super.log(msg);
+  //   this.logToFile(msg);
+  // }
 
   logToFile(line: string) {
     const path = resolve(__dirname, '../../log.txt');

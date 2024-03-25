@@ -1,0 +1,35 @@
+services:
+  rss-home-lib:
+    build:
+      context: .
+    networks:
+      - rsschool
+    environment:
+      NODE_ENV: production
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:${PORT}
+    restart: always
+    develop:
+      watch: 
+        - path: ./src
+          action: rebuild
+  postgres:
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    networks:
+      - rsschool
+    volumes:
+      - postgres:/var/lib/postgresql/data
+networks:
+  rsschool:
+    driver: bridge
+volumes:
+  postgres:

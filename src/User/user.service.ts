@@ -1,4 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { CreateUserDto, UpdatePasswordDto } from './Dto/types';
 import { User } from './User';
 import { ErrMsg, FindID } from 'src/types';
@@ -17,7 +21,7 @@ export class UserService {
       where: { id: params.id },
     });
     if (foundEntity === null)
-      throw new HttpException(ErrMsg.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new NotFoundException(ErrMsg.USER_NOT_FOUND);
     return foundEntity;
   }
 
@@ -53,8 +57,7 @@ export class UserService {
     const foundEntity = await this.prisma.user.findUnique({
       where: { id: params.id },
     });
-    if (!foundEntity)
-      throw new HttpException(ErrMsg.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+    if (!foundEntity) throw new NotFoundException(ErrMsg.USER_NOT_FOUND);
     if (foundEntity.password === updatePasswordDto.oldPassword) {
       const response = await this.prisma.user.update({
         where: { id: params.id },
@@ -77,7 +80,7 @@ export class UserService {
         updatedAt: response.updatedAt.getTime(),
       };
     } else {
-      throw new HttpException(ErrMsg.WRONG_PASSW, HttpStatus.FORBIDDEN);
+      throw new ForbiddenException(ErrMsg.WRONG_PASSW);
     }
   }
 
@@ -87,7 +90,7 @@ export class UserService {
         where: { id: params.id },
       });
     } catch {
-      throw new HttpException(ErrMsg.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new NotFoundException(ErrMsg.USER_NOT_FOUND);
     }
   }
 }

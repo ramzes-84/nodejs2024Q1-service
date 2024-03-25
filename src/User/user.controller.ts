@@ -5,11 +5,11 @@ import {
   Get,
   Header,
   HttpCode,
-  HttpException,
   HttpStatus,
   Param,
   Post,
   Put,
+  NotFoundException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdatePasswordDto } from './Dto/types';
@@ -28,8 +28,7 @@ export class UserController {
   @Header('content-type', 'application/json')
   getUserById(@Param() params: FindID) {
     const searchResult = this.userService.getUserById(params);
-    if (!searchResult)
-      throw new HttpException(ErrMsg.USER_NOT_FOUND, HttpStatus.NOT_FOUND);
+    if (!searchResult) throw new NotFoundException(ErrMsg.USER_NOT_FOUND);
     return searchResult;
   }
 

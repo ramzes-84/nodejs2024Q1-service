@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ErrMsg, FindID } from 'src/types';
 import { CreateTrackDto, UpdateTrackDto } from './Dto/types';
 import { Track } from './Track';
@@ -18,7 +18,7 @@ export class TrackService {
       where: { id: params.id },
     });
     if (foundEntity === null)
-      throw new HttpException(ErrMsg.TRACK_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new NotFoundException(ErrMsg.TRACK_NOT_FOUND);
     return foundEntity;
   }
 
@@ -39,8 +39,7 @@ export class TrackService {
     const foundEntity = await this.prisma.track.findUnique({
       where: { id: params.id },
     });
-    if (!foundEntity)
-      throw new HttpException(ErrMsg.TRACK_NOT_FOUND, HttpStatus.NOT_FOUND);
+    if (!foundEntity) throw new NotFoundException(ErrMsg.TRACK_NOT_FOUND);
     return await this.prisma.track.update({
       where: { id: params.id },
       data: { ...foundEntity, ...updateTrackDto },
@@ -54,7 +53,7 @@ export class TrackService {
       });
       await removeIdPrints(this.prisma, params.id);
     } catch {
-      throw new HttpException(ErrMsg.TRACK_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new NotFoundException(ErrMsg.TRACK_NOT_FOUND);
     }
   }
 }

@@ -1,4 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { ErrMsg, FindID } from 'src/types';
 import { PrismaClient } from '@prisma/client';
 
@@ -32,10 +36,7 @@ export class FavoriteService {
       where: { id: params.id },
     });
     if (!foundEntity)
-      throw new HttpException(
-        ErrMsg.TRACK_NOT_FOUND,
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      throw new UnprocessableEntityException(ErrMsg.TRACK_NOT_FOUND);
     await this.prisma.favorites.update({
       where: {
         id: 1,
@@ -55,10 +56,7 @@ export class FavoriteService {
       where: { id: params.id },
     });
     if (!foundEntity)
-      throw new HttpException(
-        ErrMsg.ARTIST_NOT_FOUND,
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      throw new UnprocessableEntityException(ErrMsg.ARTIST_NOT_FOUND);
     await this.prisma.favorites.update({
       where: {
         id: 1,
@@ -78,10 +76,7 @@ export class FavoriteService {
       where: { id: params.id },
     });
     if (!foundEntity)
-      throw new HttpException(
-        ErrMsg.ALBUM_NOT_FOUND,
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      throw new UnprocessableEntityException(ErrMsg.ALBUM_NOT_FOUND);
     await this.prisma.favorites.update({
       where: {
         id: 1,
@@ -100,8 +95,7 @@ export class FavoriteService {
     const foundEntity = await this.prisma.track.findUnique({
       where: { id: params.id },
     });
-    if (!foundEntity)
-      throw new HttpException(ErrMsg.TRACK_NOT_FOUND, HttpStatus.NOT_FOUND);
+    if (!foundEntity) throw new NotFoundException(ErrMsg.TRACK_NOT_FOUND);
     await this.prisma.favorites.update({
       where: {
         id: 1,
@@ -120,8 +114,7 @@ export class FavoriteService {
     const foundEntity = await this.prisma.artist.findUnique({
       where: { id: params.id },
     });
-    if (!foundEntity)
-      throw new HttpException(ErrMsg.ARTIST_NOT_FOUND, HttpStatus.NOT_FOUND);
+    if (!foundEntity) throw new NotFoundException(ErrMsg.ARTIST_NOT_FOUND);
     await this.prisma.favorites.update({
       where: {
         id: 1,
@@ -140,8 +133,7 @@ export class FavoriteService {
     const foundEntity = await this.prisma.album.findUnique({
       where: { id: params.id },
     });
-    if (!foundEntity)
-      throw new HttpException(ErrMsg.ALBUM_NOT_FOUND, HttpStatus.NOT_FOUND);
+    if (!foundEntity) throw new NotFoundException(ErrMsg.ALBUM_NOT_FOUND, D);
     await this.prisma.favorites.update({
       where: {
         id: 1,

@@ -133,7 +133,7 @@ export class FavoriteService {
     const foundEntity = await this.prisma.album.findUnique({
       where: { id: params.id },
     });
-    if (!foundEntity) throw new NotFoundException(ErrMsg.ALBUM_NOT_FOUND, D);
+    if (!foundEntity) throw new NotFoundException(ErrMsg.ALBUM_NOT_FOUND);
     await this.prisma.favorites.update({
       where: {
         id: 1,

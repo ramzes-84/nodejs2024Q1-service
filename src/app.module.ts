@@ -36,15 +36,6 @@ import { LoggerMiddleware } from './Middleware/logger.middleware';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggerMiddleware)
-      .forRoutes(
-        AppController,
-        UserController,
-        ArtistController,
-        AlbumController,
-        TrackController,
-        FavoriteController,
-      );
+    consumer.apply(LoggerMiddleware).forRoutes('*');
   }
 }

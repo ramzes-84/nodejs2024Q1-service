@@ -17,7 +17,7 @@ export class LoggingService extends ConsoleLogger implements LoggerService {
   }
 
   logToFile(msg: string, type: string, ctx?: string) {
-    const logLine = `${new Date().toISOString()} ${ctx ? ctx + ' ' : ''}${type} ${msg}\n`;
+    const logLine = `${new Date().toISOString()} ${type} ${msg}${ctx ? ' ' + ctx : ''}\n`;
     appendFileSync(this.path, logLine);
   }
 
@@ -31,7 +31,7 @@ export class LoggingService extends ConsoleLogger implements LoggerService {
   error(msg: string, ctx: string = '') {
     if (this.levels.includes('error')) {
       super.error(msg, ctx);
-      this.logToFile(msg, 'ERROR');
+      this.logToFile(msg, 'ERROR', ctx);
     }
   }
 

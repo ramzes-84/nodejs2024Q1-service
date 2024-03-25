@@ -14,4 +14,5 @@ export enum ErrMsg {
   TRACK_NOT_FOUND = 'Track not found',
   WRONG_PASSW = 'Incorrect old password',
   NOT_IN_FAVS = 'ID not found in favorites',
+  SERVER_ERR = 'Internal Server Error',
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Header, NotFoundException } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { LoggingService } from './Logger/logger.service';
 
@@ -12,11 +12,10 @@ export class AppController {
   }
 
   @Get()
-  @Header('content-type', 'application/json')
-  // getHello() {
-  //   return this.appService.getHello();
-  // }
-  throw() {
-    throw new NotFoundException('Not found for example');
+  getHello() {
+    return this.appService.getHello();
   }
+  // throw() {
+  //   throw new NotFoundException('Exception for testing');
+  // }
 }

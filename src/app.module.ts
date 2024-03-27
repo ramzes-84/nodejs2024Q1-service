@@ -14,9 +14,23 @@ import { FavoriteController } from './Favorites/favs.controller';
 import { FavoriteService } from './Favorites/favs.service';
 import { LoggerModule } from './Logger/logger.module';
 import { LoggerMiddleware } from './Middleware/logger.middleware';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { NotificationsService } from './Notifications/notifications.service';
 
 @Module({
-  imports: [ConfigModule.forRoot(), LoggerModule],
+  imports: [
+    ConfigModule.forRoot(),
+    EventEmitterModule.forRoot({
+      wildcard: false,
+      delimiter: '.',
+      newListener: true,
+      removeListener: true,
+      maxListeners: 10,
+      verboseMemoryLeak: false,
+      ignoreErrors: false,
+    }),
+    LoggerModule,
+  ],
   controllers: [
     AppController,
     UserController,
@@ -32,6 +46,7 @@ import { LoggerMiddleware } from './Middleware/logger.middleware';
     AlbumService,
     TrackService,
     FavoriteService,
+    NotificationsService,
   ],
 })
 export class AppModule implements NestModule {

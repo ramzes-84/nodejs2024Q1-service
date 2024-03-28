@@ -28,15 +28,10 @@ export class UserService {
   }
 
   async findByLogin(username: string) {
-    const usersByLogin = await this.prisma.user.findMany({
+    const usersByLogin = await this.prisma.user.findUnique({
       where: { login: username },
     });
     return usersByLogin;
-    // if (usersByLogin.length > 1)
-    //   throw new HttpException(ErrMsg.SEVERAL_LOGINS, HttpStatus.I_AM_A_TEAPOT);
-    // if (usersByLogin === null)
-    //   throw new NotFoundException(ErrMsg.USER_NOT_FOUND);
-    // return usersByLogin[0];
   }
 
   async create(user: CreateUserDto): Promise<Omit<User, 'password'>> {

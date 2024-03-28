@@ -2,6 +2,8 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  // HttpException,
+  // HttpStatus,
 } from '@nestjs/common';
 import { CreateUserDto, UpdatePasswordDto } from './Dto/types';
 import { User } from './User';
@@ -23,6 +25,18 @@ export class UserService {
     if (foundEntity === null)
       throw new NotFoundException(ErrMsg.USER_NOT_FOUND);
     return foundEntity;
+  }
+
+  async findByLogin(username: string) {
+    const usersByLogin = await this.prisma.user.findMany({
+      where: { login: username },
+    });
+    return usersByLogin;
+    // if (usersByLogin.length > 1)
+    //   throw new HttpException(ErrMsg.SEVERAL_LOGINS, HttpStatus.I_AM_A_TEAPOT);
+    // if (usersByLogin === null)
+    //   throw new NotFoundException(ErrMsg.USER_NOT_FOUND);
+    // return usersByLogin[0];
   }
 
   async create(user: CreateUserDto): Promise<Omit<User, 'password'>> {

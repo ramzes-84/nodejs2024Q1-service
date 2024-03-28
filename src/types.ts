@@ -15,4 +15,5 @@ export enum ErrMsg {
   WRONG_PASSW = 'Incorrect old password',
   NOT_IN_FAVS = 'ID not found in favorites',
   SERVER_ERR = 'Internal Server Error',
+  DUPLICATED_LOGIN = 'This login is already used',
 }

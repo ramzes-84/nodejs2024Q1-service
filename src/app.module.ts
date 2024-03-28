@@ -15,6 +15,7 @@ import { LoggerMiddleware } from './Middleware/logger.middleware';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { NotificationsService } from './Notifications/notifications.service';
 import { UserModule } from './User/user.module';
+import { AuthModule } from './Authentication/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { UserModule } from './User/user.module';
     }),
     LoggerModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [
     AppController,

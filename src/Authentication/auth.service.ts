@@ -10,6 +10,7 @@ import { User } from 'src/User/User';
 import { ErrMsg } from 'src/types';
 import { CreateUserDto } from 'src/User/Dto/types';
 import { JwtService } from '@nestjs/jwt';
+import { compare } from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +35,10 @@ export class AuthService {
     if (!foundUser) {
       throw new NotFoundException(ErrMsg.USER_NOT_FOUND);
     }
-    if (foundUser.password !== user.password) {
+
+    const isPswCorrect = await compare(user.password, foundUser.password);
+
+    if (!isPswCorrect) {
       throw new ForbiddenException(ErrMsg.WRONG_PASSW);
     }
 

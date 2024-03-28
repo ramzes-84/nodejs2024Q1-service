@@ -2,13 +2,13 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
-  // HttpException,
-  // HttpStatus,
 } from '@nestjs/common';
 import { CreateUserDto, UpdatePasswordDto } from './Dto/types';
 import { User } from './User';
 import { ErrMsg, FindID } from 'src/types';
 import { PrismaClient } from '@prisma/client';
+import { hash, compare } from 'bcrypt';
+import { env } from 'node:process';
 
 @Injectable()
 export class UserService {
@@ -35,6 +35,9 @@ export class UserService {
   }
 
   async create(user: CreateUserDto): Promise<Omit<User, 'password'>> {
+    const hashedPassword = await hash(user.password, +env.CRYPT_SALT);
+    user.password = hashedPassword;
+
     const newEntity = new User(user);
     const response = await this.prisma.user.create({
       data: {
@@ -67,7 +70,19 @@ export class UserService {
       where: { id: params.id },
     });
     if (!foundEntity) throw new NotFoundException(ErrMsg.USER_NOT_FOUND);
-    if (foundEntity.password === updatePasswordDto.oldPassword) {
+
+    const isPswCorrect = await compare(
+      updatePasswordDto.oldPassword,
+      foundEntity.password,
+    );
+
+    if (isPswCorrect) {
+      const hashedPassword = await hash(
+        updatePasswordDto.newPassword,
+        +env.CRYPT_SALT,
+      );
+      updatePasswordDto.newPassword = hashedPassword;
+
       const response = await this.prisma.user.update({
         where: { id: params.id },
         data: {

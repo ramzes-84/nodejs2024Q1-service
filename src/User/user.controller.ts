@@ -10,11 +10,14 @@ import {
   Post,
   Put,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdatePasswordDto } from './Dto/types';
 import { ErrMsg, FindID } from 'src/types';
+import { AuthGuard } from 'src/Authentication/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

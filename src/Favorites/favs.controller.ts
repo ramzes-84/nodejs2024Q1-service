@@ -7,10 +7,13 @@ import {
   HttpStatus,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { FavoriteService } from './favs.service';
 import { FindID } from 'src/types';
+import { AuthGuard } from 'src/Authentication/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('favs')
 export class FavoriteController {
   constructor(private readonly favoriteService: FavoriteService) {}

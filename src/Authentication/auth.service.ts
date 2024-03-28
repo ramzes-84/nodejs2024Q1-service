@@ -1,8 +1,8 @@
 import {
   Injectable,
   NotFoundException,
-  UnauthorizedException,
   UnprocessableEntityException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UserService } from '../User/user.service';
 import { PrismaClient } from '@prisma/client';
@@ -35,12 +35,12 @@ export class AuthService {
       throw new NotFoundException(ErrMsg.USER_NOT_FOUND);
     }
     if (foundUser.password !== user.password) {
-      throw new UnauthorizedException(ErrMsg.WRONG_PASSW);
+      throw new ForbiddenException(ErrMsg.WRONG_PASSW);
     }
 
     const payload = { userId: foundUser.id, login: foundUser.login };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      accessToken: await this.jwtService.signAsync(payload),
     };
   }
 }

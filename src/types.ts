@@ -12,7 +12,7 @@ export enum ErrMsg {
   USER_NOT_FOUND = 'User not found',
   ARTIST_NOT_FOUND = 'Artist not found',
   TRACK_NOT_FOUND = 'Track not found',
-  WRONG_PASSW = 'Incorrect old password',
+  WRONG_PASSW = 'Incorrect password',
   NOT_IN_FAVS = 'ID not found in favorites',
   SERVER_ERR = 'Internal Server Error',
   DUPLICATED_LOGIN = 'This login is already used',

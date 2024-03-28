@@ -9,11 +9,14 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { FindID } from 'src/types';
 import { CreateAlbumDto, UpdateAlbumDto } from './Dto/types';
+import { AuthGuard } from 'src/Authentication/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('album')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}

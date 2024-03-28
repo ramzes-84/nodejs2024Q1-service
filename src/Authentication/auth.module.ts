@@ -11,7 +11,7 @@ import { env } from 'node:process';
     JwtModule.register({
       global: true,
       secret: env.JWT_SECRET_KEY,
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '2h' },
     }),
   ],
   providers: [AuthService],

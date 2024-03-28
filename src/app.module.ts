@@ -1,8 +1,6 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserController } from './User/user.controller';
-import { UserService } from './User/user.service';
 import { ConfigModule } from '@nestjs/config';
 import { ArtistController } from './Artist/artist.controller';
 import { ArtistService } from './Artist/artist.service';
@@ -16,6 +14,7 @@ import { LoggerModule } from './Logger/logger.module';
 import { LoggerMiddleware } from './Middleware/logger.middleware';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { NotificationsService } from './Notifications/notifications.service';
+import { UserModule } from './User/user.module';
 
 @Module({
   imports: [
@@ -30,10 +29,10 @@ import { NotificationsService } from './Notifications/notifications.service';
       ignoreErrors: false,
     }),
     LoggerModule,
+    UserModule,
   ],
   controllers: [
     AppController,
-    UserController,
     ArtistController,
     AlbumController,
     TrackController,
@@ -41,7 +40,6 @@ import { NotificationsService } from './Notifications/notifications.service';
   ],
   providers: [
     AppService,
-    UserService,
     ArtistService,
     AlbumService,
     TrackService,
